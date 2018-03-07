@@ -4,6 +4,7 @@ int UMain(int argc, UChar* argv[])
 {
 	if (argc < 4)
 	{
+		UPrintf(USTR("ERROR: argument count error\n\n"));
 		return 1;
 	}
 	n32 nRemapType = SToN32(argv[1]);
@@ -21,6 +22,7 @@ int UMain(int argc, UChar* argv[])
 	}
 	else
 	{
+		UPrintf(USTR("ERROR: remap type error\n\n"));
 		return 1;
 	}
 	vector<URegex> vCopy;
@@ -30,10 +32,11 @@ int UMain(int argc, UChar* argv[])
 	{
 		if (argc != 5)
 		{
+			UPrintf(USTR("ERROR: argument count error\n\n"));
 			return 1;
 		}
 		sRegexPath = argv[4];
-		FILE* fp = UFopen(sRegexPath.c_str(), USTR("rb"), false);
+		FILE* fp = UFopen(sRegexPath.c_str(), USTR("rb"));
 		if (fp == nullptr)
 		{
 			return 1;
@@ -46,7 +49,7 @@ int UMain(int argc, UChar* argv[])
 	else
 	{
 		sRegexPath = UGetModuleDirName() + USTR("/regex_remaptext.txt");
-		FILE* fp = UFopen(sRegexPath.c_str(), USTR("rb"), false);
+		FILE* fp = UFopen(sRegexPath.c_str(), USTR("rb"));
 		if (fp == nullptr)
 		{
 			try
@@ -67,7 +70,7 @@ int UMain(int argc, UChar* argv[])
 	}
 	if (!sRegexPath.empty())
 	{
-		FILE* fp = UFopen(sRegexPath.c_str(), USTR("rb"), false);
+		FILE* fp = UFopen(sRegexPath.c_str(), USTR("rb"));
 		if (fp == nullptr)
 		{
 			return 1;
@@ -76,6 +79,8 @@ int UMain(int argc, UChar* argv[])
 		u32 uTxtSize = ftell(fp);
 		if (uTxtSize % 2 != 0)
 		{
+			UPrintf(USTR("%") PRIUS USTR("\n"), sRegexPath.c_str());
+			UPrintf(USTR("ERROR: not Unicode text\n\n"));
 			fclose(fp);
 			return 1;
 		}
@@ -86,6 +91,8 @@ int UMain(int argc, UChar* argv[])
 		fclose(fp);
 		if (pTemp[0] != 0xFEFF)
 		{
+			UPrintf(USTR("%") PRIUS USTR("\n"), sRegexPath.c_str());
+			UPrintf(USTR("ERROR: no Unicode BOM\n\n"));
 			delete[] pTemp;
 			return 1;
 		}
@@ -132,6 +139,7 @@ int UMain(int argc, UChar* argv[])
 	}
 	if (vCopy.empty() && vRemap.empty())
 	{
+		UPrintf(USTR("ERROR: no rule\n\n"));
 		return 1;
 	}
 	map<UString, UString> mFileMapping;
@@ -249,7 +257,7 @@ int UMain(int argc, UChar* argv[])
 		for (set<UString>::iterator it = sFile.begin(); it != sFile.end(); ++it)
 		{
 			const UString& sInFileName = *it;
-			FILE* fp = UFopen(sInFileName.c_str(), USTR("rb"), false);
+			FILE* fp = UFopen(sInFileName.c_str(), USTR("rb"));
 			if (fp == nullptr)
 			{
 				return 1;
@@ -258,6 +266,8 @@ int UMain(int argc, UChar* argv[])
 			u32 uTxtSize = ftell(fp);
 			if (uTxtSize % 2 != 0)
 			{
+				UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
+				UPrintf(USTR("ERROR: not Unicode text\n\n"));
 				fclose(fp);
 				return 1;
 			}
@@ -268,6 +278,8 @@ int UMain(int argc, UChar* argv[])
 			fclose(fp);
 			if (pTemp[0] != 0xFEFF)
 			{
+				UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
+				UPrintf(USTR("ERROR: no Unicode BOM\n\n"));
 				delete[] pTemp;
 				return 1;
 			}
@@ -280,6 +292,17 @@ int UMain(int argc, UChar* argv[])
 				wstring::size_type uPos1 = sTxt.find(L"\r\n--------------------------------------\r\n", uPos0);
 				if (uPos1 == wstring::npos)
 				{
+					wstring sNum;
+					uPos1 = sTxt.find(L"\r\n", uPos0);
+					if (uPos1 != wstring::npos)
+					{
+						sNum = sTxt.substr(uPos0, uPos1 - uPos0);
+					}
+					else
+					{
+						sNum = sTxt.substr(uPos0);
+					}
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" can not find first \\r\\n--------------------------------------\\r\\n\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				wstring sNum = sTxt.substr(uPos0, uPos1 - uPos0);
@@ -287,6 +310,7 @@ int UMain(int argc, UChar* argv[])
 				uPos1 = sTxt.find(L"\r\n======================================\r\n", uPos0);
 				if (uPos1 == wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" can not find \\r\\n======================================\\r\\n\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				wstring sStmtOld = sTxt.substr(uPos0, uPos1 - uPos0);
@@ -294,6 +318,7 @@ int UMain(int argc, UChar* argv[])
 				uPos1 = sTxt.find(L"\r\n--------------------------------------", uPos0);
 				if (uPos1 == wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" can not find last \\r\\n--------------------------------------\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				wstring sStmtNew = sTxt.substr(uPos0, uPos1 - uPos0);
@@ -303,14 +328,17 @@ int UMain(int argc, UChar* argv[])
 				sTempTxt = Replace(sTempTxt, L"[======================================]", L"");
 				if (sTempTxt.find(L"--------------------------------------") != wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" find --------------------------------------\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"======================================") != wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" find ======================================\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"No.") != wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" find No.\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				sTempTxt = sStmtNew;
@@ -318,14 +346,17 @@ int UMain(int argc, UChar* argv[])
 				sTempTxt = Replace(sTempTxt, L"[======================================]", L"");
 				if (sTempTxt.find(L"--------------------------------------") != wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" find --------------------------------------\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"======================================") != wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" find ======================================\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"No.") != wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" find No.\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sStmtNew != sReplacement && !EndWith(sNum, L"\u3002"))
@@ -342,7 +373,7 @@ int UMain(int argc, UChar* argv[])
 		for (set<UString>::iterator it = sFile.begin(); it != sFile.end(); ++it)
 		{
 			const UString& sInFileName = *it;
-			FILE* fp = UFopen(sInFileName.c_str(), USTR("rb"), false);
+			FILE* fp = UFopen(sInFileName.c_str(), USTR("rb"));
 			if (fp == nullptr)
 			{
 				return 1;
@@ -351,6 +382,8 @@ int UMain(int argc, UChar* argv[])
 			u32 uTxtSize = ftell(fp);
 			if (uTxtSize % 2 != 0)
 			{
+				UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
+				UPrintf(USTR("ERROR: not Unicode text\n\n"));
 				fclose(fp);
 				return 1;
 			}
@@ -361,6 +394,8 @@ int UMain(int argc, UChar* argv[])
 			fclose(fp);
 			if (pTemp[0] != 0xFEFF)
 			{
+				UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
+				UPrintf(USTR("ERROR: no Unicode BOM\n\n"));
 				delete[] pTemp;
 				return 1;
 			}
@@ -374,6 +409,17 @@ int UMain(int argc, UChar* argv[])
 				wstring::size_type uPos1 = sTxt.find(L"\r\n--------------------------------------\r\n", uPos0);
 				if (uPos1 == wstring::npos)
 				{
+					wstring sNum;
+					uPos1 = sTxt.find(L"\r\n", uPos0);
+					if (uPos1 != wstring::npos)
+					{
+						sNum = sTxt.substr(uPos0, uPos1 - uPos0);
+					}
+					else
+					{
+						sNum = sTxt.substr(uPos0);
+					}
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" can not find first \\r\\n--------------------------------------\\r\\n\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				wstring sNum = sTxt.substr(uPos0, uPos1 - uPos0);
@@ -381,6 +427,7 @@ int UMain(int argc, UChar* argv[])
 				uPos1 = sTxt.find(L"\r\n======================================\r\n", uPos0);
 				if (uPos1 == wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" can not find \\r\\n======================================\\r\\n\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				wstring sStmtOld = sTxt.substr(uPos0, uPos1 - uPos0);
@@ -388,6 +435,7 @@ int UMain(int argc, UChar* argv[])
 				uPos1 = sTxt.find(L"\r\n--------------------------------------", uPos0);
 				if (uPos1 == wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" can not find last \\r\\n--------------------------------------\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				wstring sStmtNew = sTxt.substr(uPos0, uPos1 - uPos0);
@@ -397,14 +445,17 @@ int UMain(int argc, UChar* argv[])
 				sTempTxt = Replace(sTempTxt, L"[======================================]", L"");
 				if (sTempTxt.find(L"--------------------------------------") != wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" find --------------------------------------\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"======================================") != wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" find ======================================\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"No.") != wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" find No.\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				sTempTxt = sStmtNew;
@@ -412,14 +463,17 @@ int UMain(int argc, UChar* argv[])
 				sTempTxt = Replace(sTempTxt, L"[======================================]", L"");
 				if (sTempTxt.find(L"--------------------------------------") != wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" find --------------------------------------\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"======================================") != wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" find ======================================\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"No.") != wstring::npos)
 				{
+					UPrintf(USTR("ERROR: %") PRIUS USTR(" find No.\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				bool bMark = EndWith(sNum, L"\u3002");
@@ -491,7 +545,7 @@ int UMain(int argc, UChar* argv[])
 					}
 				}
 			}
-			fp = UFopen(sOutFileName.c_str(), USTR("wb"), false);
+			fp = UFopen(sOutFileName.c_str(), USTR("wb"));
 			if (fp == nullptr)
 			{
 				return 1;

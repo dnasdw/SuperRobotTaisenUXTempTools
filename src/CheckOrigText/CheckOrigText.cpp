@@ -158,7 +158,7 @@ int UMain(int argc, UChar* argv[])
 		if (uPos1 == wstring::npos)
 		{
 			UPrintf(USTR("%") PRIUS USTR("\n"), WToU(sNumOrig).c_str());
-			UPrintf(USTR("ERROR: %") PRIUS USTR(" can not find last \\r\\n--------------------------------------\\r\\n\n\n"), WToU(sNum).c_str());
+			UPrintf(USTR("ERROR: %") PRIUS USTR(" can not find last \\r\\n--------------------------------------\n\n"), WToU(sNum).c_str());
 			return 1;
 		}
 		wstring sStmtNew = sTxt.substr(uPos0, uPos1 - uPos0);

@@ -302,6 +302,7 @@ int UMain(int argc, UChar* argv[])
 					{
 						sNum = sTxt.substr(uPos0);
 					}
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" can not find first \\r\\n--------------------------------------\\r\\n\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
@@ -310,6 +311,7 @@ int UMain(int argc, UChar* argv[])
 				uPos1 = sTxt.find(L"\r\n======================================\r\n", uPos0);
 				if (uPos1 == wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" can not find \\r\\n======================================\\r\\n\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
@@ -318,6 +320,7 @@ int UMain(int argc, UChar* argv[])
 				uPos1 = sTxt.find(L"\r\n--------------------------------------", uPos0);
 				if (uPos1 == wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" can not find last \\r\\n--------------------------------------\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
@@ -328,16 +331,19 @@ int UMain(int argc, UChar* argv[])
 				sTempTxt = Replace(sTempTxt, L"[======================================]", L"");
 				if (sTempTxt.find(L"--------------------------------------") != wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" find --------------------------------------\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"======================================") != wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" find ======================================\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"No.") != wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" find No.\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
@@ -346,16 +352,19 @@ int UMain(int argc, UChar* argv[])
 				sTempTxt = Replace(sTempTxt, L"[======================================]", L"");
 				if (sTempTxt.find(L"--------------------------------------") != wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" find --------------------------------------\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"======================================") != wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" find ======================================\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"No.") != wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" find No.\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
@@ -419,6 +428,7 @@ int UMain(int argc, UChar* argv[])
 					{
 						sNum = sTxt.substr(uPos0);
 					}
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" can not find first \\r\\n--------------------------------------\\r\\n\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
@@ -427,6 +437,7 @@ int UMain(int argc, UChar* argv[])
 				uPos1 = sTxt.find(L"\r\n======================================\r\n", uPos0);
 				if (uPos1 == wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" can not find \\r\\n======================================\\r\\n\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
@@ -435,6 +446,7 @@ int UMain(int argc, UChar* argv[])
 				uPos1 = sTxt.find(L"\r\n--------------------------------------", uPos0);
 				if (uPos1 == wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" can not find last \\r\\n--------------------------------------\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
@@ -445,16 +457,19 @@ int UMain(int argc, UChar* argv[])
 				sTempTxt = Replace(sTempTxt, L"[======================================]", L"");
 				if (sTempTxt.find(L"--------------------------------------") != wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" find --------------------------------------\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"======================================") != wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" find ======================================\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"No.") != wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" find No.\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
@@ -463,16 +478,19 @@ int UMain(int argc, UChar* argv[])
 				sTempTxt = Replace(sTempTxt, L"[======================================]", L"");
 				if (sTempTxt.find(L"--------------------------------------") != wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" find --------------------------------------\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"======================================") != wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" find ======================================\n\n"), WToU(sNum).c_str());
 					return 1;
 				}
 				if (sTempTxt.find(L"No.") != wstring::npos)
 				{
+					UPrintf(USTR("%") PRIUS USTR("\n"), sInFileName.c_str());
 					UPrintf(USTR("ERROR: %") PRIUS USTR(" find No.\n\n"), WToU(sNum).c_str());
 					return 1;
 				}

@@ -555,7 +555,7 @@ int UMain(int argc, UChar* argv[])
 				}
 				for (n32 i = 1; i < static_cast<n32>(vPath.size()) - 1; i++)
 				{
-					sOutDirPath += USTR('/') + vPath[i];
+					sOutDirPath += USTR("/") + vPath[i];
 					if (!UMakeDir(sOutDirPath.c_str()))
 					{
 						UPrintf(USTR("ERROR: create dir %") PRIUS USTR(" error\n\n"), sOutDirPath.c_str());

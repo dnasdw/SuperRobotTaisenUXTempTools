@@ -37,13 +37,14 @@ int UMain(int argc, UChar* argv[])
 	sTxt = Replace(sTxt, L"\r\n", L"\n");
 	sTxt = Replace(sTxt, L'\r', L'\n');
 	sTxt = Replace(sTxt, L'\n', L"\r\n");
+	U16String sTxtU16 = WToU16(sTxt);
 	fp = UFopen(argv[1], USTR("wb"));
 	if (fp == nullptr)
 	{
 		return 1;
 	}
 	fwrite("\xFF\xFE", 2, 1, fp);
-	fwrite(sTxt.c_str(), 2, sTxt.size(), fp);
+	fwrite(sTxtU16.c_str(), 2, sTxtU16.size(), fp);
 	fclose(fp);
 	return 0;
 }

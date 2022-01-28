@@ -563,13 +563,14 @@ int UMain(int argc, UChar* argv[])
 					}
 				}
 			}
+			U16String sTxtNewU16 = WToU16(sTxtNew);
 			fp = UFopen(sOutFileName.c_str(), USTR("wb"));
 			if (fp == nullptr)
 			{
 				return 1;
 			}
 			fwrite("\xFF\xFE", 2, 1, fp);
-			fwrite(sTxtNew.c_str(), 2, sTxtNew.size(), fp);
+			fwrite(sTxtNewU16.c_str(), 2, sTxtNewU16.size(), fp);
 			fclose(fp);
 		}
 	}

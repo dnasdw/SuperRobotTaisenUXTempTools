@@ -184,9 +184,11 @@ int UMain(int argc, UChar* argv[])
 			UPrintf(USTR("ERROR: %") PRIUS USTR(" find No.\n\n"), WToU(sNum).c_str());
 			return 1;
 		}
-		if (!EndWith(sNumOrig, L"\u3002") && EndWith(sNum, L"\u3002"))
+		if (sNum != sNumOrig && sNum != sNumOrig + L"\u3002")
 		{
-			sNum = sNumOrig + L"\u3002";
+			UPrintf(USTR("%") PRIUS USTR("\n"), WToU(sNumOrig).c_str());
+			UPrintf(USTR("ERROR: %") PRIUS USTR("\n\n"), WToU(sNum).c_str());
+			return 1;
 		}
 		if (!sTxtNew.empty())
 		{
@@ -199,13 +201,14 @@ int UMain(int argc, UChar* argv[])
 		sTxtNew += sStmtNew;
 		sTxtNew += L"\r\n--------------------------------------\r\n";
 	}
+	U16String sTxtNewU16 = WToU16(sTxtNew);
 	fp = UFopen(argv[2], USTR("wb"));
 	if (fp == nullptr)
 	{
 		return 1;
 	}
 	fwrite("\xFF\xFE", 2, 1, fp);
-	fwrite(sTxtNew.c_str(), 2, sTxtNew.size(), fp);
+	fwrite(sTxtNewU16.c_str(), 2, sTxtNewU16.size(), fp);
 	fclose(fp);
 	return 0;
 }
